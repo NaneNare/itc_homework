@@ -183,6 +183,45 @@ CREATE VIEW task_1 AS
 ALTER TABLE public.task_1 OWNER TO postgres;
 
 --
+-- Name: task_2; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW task_2 AS
+ SELECT students.name,
+    students.surname,
+    itc.itc,
+    min(exams.score) AS min,
+    max(exams.score) AS max,
+    avg(exams.score) AS avg,
+    count(DISTINCT itc.itc) AS count
+   FROM ((exams
+     JOIN students ON ((exams.student_id = students.id)))
+     JOIN itc ON ((students.itc_id = itc.id)))
+  GROUP BY students.name, students.surname, itc.itc;
+
+
+ALTER TABLE public.task_2 OWNER TO postgres;
+
+--
+-- Name: task_3; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW task_3 AS
+ SELECT itc.itc,
+    subjects.title,
+    max(exams.score) AS max,
+    min(exams.score) AS min,
+    count(exams.score) AS count
+   FROM (((exams
+     JOIN students ON ((exams.student_id = students.id)))
+     JOIN itc ON ((students.itc_id = itc.id)))
+     JOIN subjects ON ((exams.subject_id = subjects.id)))
+  GROUP BY subjects.title, itc.itc;
+
+
+ALTER TABLE public.task_3 OWNER TO postgres;
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
